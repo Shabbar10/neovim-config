@@ -11,3 +11,4 @@ end
 map("<leader>cm", "<cmd>Mason<CR>", "Open Mason")
 
 vim.opt.colorcolumn = "80"
+
