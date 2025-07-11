@@ -7,24 +7,33 @@ return {
 		conform.setup({
 			formatters_by_ft = {
 				cpp = { "clang-format" },
-				go = { "gofmt" },
 				lua = { "stylua" },
 				python = { "isort", "black" },
-				rust = { "rustfmt" },
 			},
-			format_on_save = {
-				lsp_fallback = true,
-				async = false,
-				timeout_ms = 1000,
-			},
+			format_on_save = false,
+			-- format_on_save = {
+			-- 	lsp_fallback = true,
+			-- 	async = false,
+			-- 	timeout_ms = 1000,
+			-- },
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
-			conform.format({
+			local mode = vim.api.nvim_get_mode().mode
+			local opts = {
 				lsp_fallback = true,
 				async = false,
 				timeout_ms = 1000,
-			})
-		end, { desc = "Format file" })
+			}
+
+			if mode == "v" or mode == "V" then
+				opts.range = {
+					["start"] = vim.api.nvim_buf_get_mark(0, "<"),
+					["end"] = vim.api.nvim_buf_get_mark(0, ">"),
+				}
+			end
+
+			require("conform").format(opts)
+		end, { desc = "Format file or selection" })
 	end,
 }
