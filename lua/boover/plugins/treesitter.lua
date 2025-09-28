@@ -2,9 +2,13 @@ return {
 	"nvim-treesitter/nvim-treesitter",
 	event = { "BufReadPre", "BufNewFile" },
 	build = ":TSUpdate",
-	dependencies = { "windwp/nvim-ts-autotag" },
+	dependencies = {
+		"windwp/nvim-ts-autotag",
+		"nvim-treesitter/nvim-treesitter-context",
+	},
 	config = function()
 		local treesitter = require("nvim-treesitter.configs")
+		local context = require("treesitter-context")
 
 		treesitter.setup({
 			highlight = {
@@ -36,6 +40,10 @@ return {
 					node_decremental = "bs",
 				},
 			},
+		})
+
+		context.setup({
+			enable = true,
 		})
 	end,
 }

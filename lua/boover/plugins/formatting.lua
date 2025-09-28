@@ -9,6 +9,7 @@ return {
 				cpp = { "clang-format" },
 				lua = { "stylua" },
 				python = { "isort", "black" },
+				javascript = { "prettier" },
 			},
 			format_on_save = false,
 			-- format_on_save = {

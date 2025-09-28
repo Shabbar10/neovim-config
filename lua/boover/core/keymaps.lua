@@ -14,8 +14,5 @@ keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" })
 keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
 
 -- bringing back half-page scroll
-keymap.set("n", "<C-F>", "<C-D>zz<cmd>Beacon<CR>", { desc = "Scroll down half a page" })
-keymap.set("n", "<C-B>", "<C-U>zz<cmd>Beacon<CR>", { desc = "Scroll up half a page" })
-
--- Flash cursor on zz
-keymap.set("n", "zz", "zz<cmd>Beacon<CR>")
+keymap.set("n", "<C-F>", "<C-D>zz", { desc = "Scroll down half a page" })
+keymap.set("n", "<C-B>", "<C-U>zz", { desc = "Scroll up half a page" })
