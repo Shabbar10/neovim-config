@@ -4,20 +4,20 @@ return {
 		"jay-babu/mason-nvim-dap.nvim",
 		"rcarriga/nvim-dap-ui",
 		"nvim-neotest/nvim-nio",
-    "Weissle/persistent-breakpoints.nvim",
+		"Weissle/persistent-breakpoints.nvim",
 		-- "mxsdev/nvim-dap-vscode-js",
 	},
 	config = function()
 		local dap = require("dap")
 		local dapui = require("dapui")
 		local mason_dap = require("mason-nvim-dap")
-    local breakpoints = require('persistent-breakpoints')
+		local breakpoints = require("persistent-breakpoints")
 
 		dapui.setup()
 
-    breakpoints.setup({
-      load_breakpoints_event = { "BufReadPost" }
-    })
+		breakpoints.setup({
+			load_breakpoints_event = { "BufReadPost" },
+		})
 
 		dap.listeners.before.attach.dapui_config = function()
 			dapui.open()
@@ -50,6 +50,32 @@ return {
 				args = { "/Users/shabbar.adamjee/Dev/js-debug/src/dapDebugServer.js", "${port}" },
 			},
 		}
+
+		dap.adapters.python = function(cb, config)
+			if config.request == "attach" then
+				---@diagnostic disable-next-line: undefined-field
+				local port = (config.connect or config).port
+				---@diagnostic disable-next-line: undefined-field
+				local host = (config.connect or config).host or "127.0.0.1"
+				cb({
+					type = "server",
+					port = assert(port, "`connect.port` is required for a python `attach` configuration"),
+					host = host,
+					options = {
+						source_filetype = "python",
+					},
+				})
+			else
+				cb({
+					type = "executable",
+					command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
+					args = { "-m", "debugpy.adapter" },
+					options = {
+						source_filetype = "python",
+					},
+				})
+			end
+		end
 
 		dap.adapters["lldb"] = {
 			type = "executable",
@@ -88,9 +114,19 @@ return {
 			dap.step_out()
 		end, { desc = "Debug: Step Out" })
 
-		vim.keymap.set("n", "<Leader>dt", "<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>", { desc = "Debug: Toggle Breakpoint" })
+		vim.keymap.set(
+			"n",
+			"<Leader>dt",
+			"<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>",
+			{ desc = "Debug: Toggle Breakpoint" }
+		)
 
-		vim.keymap.set("n", "<Leader>dx", "<cmd>lua require('persistent-breakpoints.api').clear_all_breakpoints()<cr>", { desc = "" })
+		vim.keymap.set(
+			"n",
+			"<Leader>dx",
+			"<cmd>lua require('persistent-breakpoints.api').clear_all_breakpoints()<cr>",
+			{ desc = "" }
+		)
 
 		vim.keymap.set("n", "<Leader>ds", function()
 			print("DAP: Terminating debug session")

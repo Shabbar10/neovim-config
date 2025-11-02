@@ -18,6 +18,11 @@ return {
 					filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
 					extra_args = { "--semi", "true" },
 				}),
+
+				null_ls.builtins.formatting.black.with({
+					filetypes = { "python" },
+					extra_args = { "--line-length", "79" },
+				}),
 			},
 		})
 	end,

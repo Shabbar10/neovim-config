@@ -11,6 +11,11 @@ return {
 				python = { "isort", "black" },
 				javascript = { "prettier" },
 			},
+			formatters = {
+				black = {
+					prepend_args = { "--line-length", "79" },
+				},
+			},
 			format_on_save = false,
 			-- format_on_save = {
 			-- 	lsp_fallback = true,
